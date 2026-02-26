@@ -1,3 +1,8 @@
 #include <iostream>
+#include "constants.h"
 
-// To be done currently in setup phase
+// testing main function for now:
+int main(){
+    std::cout << "Solar Mass = " << MSUN << std::endl;
+    return 0;
+}
