@@ -2,4 +2,7 @@
 
 ### Please ensure Raylib is downloaded to be able to run this script effectively otherwise build will fail.
 
+
+[Raylib Download Help](https://github.com/raysan5/raylib/blob/master/README.md)
+
 Uses Equations of state alongside numerical methods to create a simulation of white dwarfs using C++ and Raylib.
