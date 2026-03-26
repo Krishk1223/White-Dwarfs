@@ -21,7 +21,7 @@ namespace EOS{
     returns: rho_0 in kgm^(-3)
     */
     double get_rho_0(){
-        double RHO_0_num = (MP * std::pow(ME, 3.0) * std::pow(SOL, 3.0))/(3.0 * std::pow(PI, 2.0) * std::pow(HBAR, 3.0));
+        double RHO_0_num = (MP * (ME * ME * ME) * (SOL * SOL * SOL))/(3.0 * (PI * PI)  * (HBAR * HBAR * HBAR));
         return RHO_0_num / Y_e;
     }
  }

@@ -1,4 +1,4 @@
-// config.h: 
+// config.h: contains the electron fraction
 #pragma once
 
 //Purpose of this file is to be able to store the Ye value for the White Dwarf. 
