@@ -10,7 +10,7 @@ Uses Equations of state alongside numerical methods to integrate over the centra
   uv sync
 ```
 2. Select electron fraction (Ye) value in **src** directory's **config.h** file (0.464 for Fe-56 composition or 0.5 for C-12 composition)
-3. Run the following commands in the **white_dwarfs** folder (in order):
+3. Run the following commands in the **White_Dwarfs** folder (in order):
 ```bash
   cmake -S -B build
 ```
@@ -25,7 +25,7 @@ Uses Equations of state alongside numerical methods to integrate over the centra
   ./build/white_dwarfs
 ```
 
-4. When your csv file is generated run the python script in the **white_dwarfs** folder by using:
+4. When your csv file is generated run the python script in the **White_Dwarfs** folder by using:
 ```bash
   uv run plots.py
 ```
