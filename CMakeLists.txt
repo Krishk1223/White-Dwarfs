@@ -6,4 +6,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(white_dwarfs
     src/main.cpp
+    src/eqofstate.cpp
+    src/solver.cpp
 )
