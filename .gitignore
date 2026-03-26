@@ -80,3 +80,36 @@ cmake-build-release/
 
 #mac specific:
 .DS_Store
+
+# Python
+.venv/
+.env
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.Python
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+
+# Python tooling
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# OS
+Thumbs.db
+
+# Ninja
+*.ninja
+.ninja_log
+.ninja_deps

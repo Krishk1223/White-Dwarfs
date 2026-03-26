@@ -9,3 +9,4 @@ add_executable(white_dwarfs
     src/eqofstate.cpp
     src/solver.cpp
 )
+
