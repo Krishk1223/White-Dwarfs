@@ -1,9 +1,23 @@
+#include "raylib.h"
+#include "raymath.h"
 #include <iostream>
 #include <fstream>
 #include <cmath>
 #include <filesystem>
+#include "config.h"
+#include "constants.h"
 #include "solver.h"
 #include "eqofstate.h"
+
+int simulation(double mass);
+
+struct Body{
+    Vector2 position; // x and y positions
+    Vector2 velocity; // x and y velocities
+    double mass; // mass in kg 
+    float radius; // draw size
+    Color Colour; 
+};
 
 // testing main function for now:
 int main(){
@@ -31,9 +45,70 @@ int main(){
         outfile << rho_central << "," << result.M_solar << "," << result.R_solar << "\n";
     }
 
-    // close up csv file:
+    // write Y_E value and close up csv file:
+    outfile << "Electron Fraction," << Y_e << "\n";
     outfile.close();
     std::cout << "Data written successfully in ./data/white_dwarfs.csv \n";
+    
+    // Testing raylib:
+    
+    // simulation(MSUN);
 
     return 0;
+}
+
+
+int simulation(double mass) {
+    const int screenWidth = 800;
+    const int screenHeight = 600;
+    InitWindow(screenWidth, screenHeight, "White Dwarf Orbit Simulator (stage 1)");
+
+    // Frame rate:
+    SetTargetFPS(60);
+
+    // Camera setup: default is left corner so we have to drag to centre
+    Camera2D camera = { 0 };
+    camera.target = { 0.0f, 0.0f };
+    camera.offset = { screenWidth/2.0f, screenHeight/2.0f }; // centre screen
+    camera.rotation = 0.0f;
+    camera.zoom = 1.0f;
+
+    // Bodies that will be in motion:
+    Body Star = { {0, 0}, {0, 0}, mass, 15.0f, RAYWHITE };
+    Body Planet = { {200.0f, 0.0f}, {0.0f, -150.0f}, 5.972e24, 8.0f, SKYBLUE };
+
+    while(!WindowShouldClose()) {
+        // Motion:
+        float dt = GetFrameTime();
+
+        // lets try basic newtonian motion first:
+
+        Vector2 r = Vector2Subtract(Star.position, Planet.position);
+        float mag_r = Vector2Length(r);
+
+        //prevent 0 division 
+        if (mag_r < 0.1f) {
+            float accel_mag = (G * Star.mass)/(mag_r * mag_r); // a = GM/r^2
+
+            // Directional acceleration:
+            Vector2 acceleration = Vector2Scale(Vector2Normalize(r), accel_mag);
+            //velocity update:
+            Planet.velocity = Vector2Add(Planet.velocity, Vector2Scale(acceleration, dt));
+            //position update:
+            Planet.position = Vector2Add(Planet.position, Vector2Scale(Planet.velocity, dt));
+        } 
+
+
+        BeginDrawing();
+        ClearBackground(BLACK); // make sure to clear to prevent dragging
+        BeginMode2D(camera);
+            DrawCircleV(Star.position, Star.radius, Star.Colour);
+            DrawCircleV(Planet.position, Planet.radius, Planet.Colour);
+        EndMode2D();
+        DrawText("Linear motion physics no gravity yet", 10, 10, 10, GREEN);
+        EndDrawing();
+    }
+    CloseWindow();
+    return 0;
+
 }

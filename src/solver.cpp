@@ -96,8 +96,8 @@ namespace Solver{
         double rho_0 = EOS::get_rho_0();
 
         // calculate star radius and mass:
-        double R_0 = std::sqrt((3.0 * Y_e * ME * SOL * SOL)/(4 * PI * G * MP * rho_0));
-        double M_0 = (4 * PI/3) * rho_0 * (R_0 * R_0 * R_0);
+        double R_0 = std::sqrt((3.0 * Y_e * ME * SOL * SOL)/(4 * PI_C * G * MP * rho_0));
+        double M_0 = (4 * PI_C/3) * rho_0 * (R_0 * R_0 * R_0);
 
         // return stellar mass and radius as a fraction of solar mass and radius  
         StarResult result;

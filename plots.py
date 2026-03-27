@@ -1,20 +1,31 @@
 import os
+import subprocess
 import sys
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def main():
-    if not os.path.exists('plots'):
-        os.makedirs('plots')
-    
+def main(generate_data: bool = False):
+    if generate_data:
+        try:
+            # build and run the C++ program to generate the CSV data before plotting
+            subprocess.run('cmake -S . -B build && cmake --build build && ./build/white_dwarfs', shell=True, check=True)
+        except subprocess.CalledProcessError:
+            print("Error: Failed to build or run the white_dwarfs program.")
+            sys.exit(1)
+
     # Load CSV data:
     try:
         data = pd.read_csv('data/white_dwarfs.csv')
     except FileNotFoundError:
         print("Error: 'data/white_dwarfs.csv' not found.")
         sys.exit(1)
+    
+    if not os.path.exists('plots'):
+        os.makedirs('plots')
 
-    # Extract columns:
+    # Extract relevant columns:
+    electron_fraction = data.iloc[-1, 1]
+    data = data.iloc[:-1] #remove last row
     mass = data['Mass_MSUN'].values
     radius = data['Radius_RSUN'].values
 
@@ -44,16 +55,20 @@ def main():
         plt.annotate(label, (literature_df['masses'].iloc[i], literature_df['radii'].iloc[i]), 
                     textcoords="offset points", xytext=(0,10), ha='center', fontsize=9)
     
-    plt.title('Mass-Radius Relationship of White Dwarfs')
+    plt.title(f'Mass-Radius Relationship of White Dwarfs (Electron Fraction: {electron_fraction})', fontsize=12)
     plt.xlabel('Mass (Solar Masses)')
     plt.ylabel('Radius (Solar Radii)')
     plt.grid(True, alpha=0.3)
     plt.legend(fontsize=10)
     plt.tight_layout()
 
-    plt.savefig('plots/mass_radius_relationship.png')
-    print("Plot saved to plots/mass_radius_relationship.png")
+    plt.savefig(f'plots/mass_radius_relationship_{electron_fraction}.png')
+    print(f"Plot saved to plots/mass_radius_relationship_{electron_fraction}.png")
 
 
 if __name__ == "__main__":
-    main()
+    aliases = ['--generate', '--generate-data', '-g']
+    if len(sys.argv) > 1 and sys.argv[1] in aliases:
+        main(generate_data=True)
+    else:
+        main()
