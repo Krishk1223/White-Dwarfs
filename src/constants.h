@@ -15,5 +15,6 @@ constexpr double KB = 1.380658e-23; // JK^-1 : Boltzmann Constant
 constexpr double AVOGADRO = 6.0221367e23; // mol^-1 : Avogadro's Constant
 constexpr double MSUN = 1.98e30; // kg : Mass of Sun (baseline)
 constexpr double RSUN = 6.95e8; // m : Radius of Sun (baseline)
+constexpr double MEARTH = 5.972e24; // kg : Mass of Earth (baseline)
 
 

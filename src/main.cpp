@@ -9,7 +9,7 @@
 #include "solver.h"
 #include "eqofstate.h"
 
-int simulation(double mass);
+int simulation(double star_mass, double planet_mass);
 
 struct Body{
     Vector2 position; // x and y positions
@@ -51,14 +51,17 @@ int main(){
     std::cout << "Data written successfully in ./data/white_dwarfs.csv \n";
     
     // Testing raylib:
-    
-    // simulation(MSUN);
+    #ifdef HAVE_RAYLIB
+        simulation(MSUN, MEARTH);
+    #else
+        std::cout << "Simulation not built (raylib may be disabled)\n";
+    #endif
 
     return 0;
 }
 
 
-int simulation(double mass) {
+int simulation(double star_mass, double planet_mass) {
     const int screenWidth = 800;
     const int screenHeight = 600;
     InitWindow(screenWidth, screenHeight, "White Dwarf Orbit Simulator (stage 1)");
@@ -74,21 +77,25 @@ int simulation(double mass) {
     camera.zoom = 1.0f;
 
     // Bodies that will be in motion:
-    Body Star = { {0, 0}, {0, 0}, mass, 15.0f, RAYWHITE };
-    Body Planet = { {200.0f, 0.0f}, {0.0f, -150.0f}, 5.972e24, 8.0f, SKYBLUE };
+    Body Star = { {0, 0}, {0, 0}, star_mass, 15.0f, RAYWHITE };
+    Body Planet = { {200.0f, 0.0f}, {0.0f, -10.0f}, planet_mass, 8.0f, SKYBLUE };
 
     while(!WindowShouldClose()) {
         // Motion:
         float dt = GetFrameTime();
 
         // lets try basic newtonian motion first:
+        const double PIXELS_PER_AU = 200.0f;
+        const double AU_TO_METRES = 1.49e11f;
+        const double SCALE = (PIXELS_PER_AU)/(AU_TO_METRES);
 
         Vector2 r = Vector2Subtract(Star.position, Planet.position);
-        float mag_r = Vector2Length(r);
+        double mag_r = Vector2Length(r) * SCALE;
 
         //prevent 0 division 
-        if (mag_r < 0.1f) {
-            float accel_mag = (G * Star.mass)/(mag_r * mag_r); // a = GM/r^2
+        if (mag_r > 0.1f) {
+            float accel_mag = ((G * Star.mass)/(mag_r * mag_r)) / SCALE; // a = GM/r^2
+            
 
             // Directional acceleration:
             Vector2 acceleration = Vector2Scale(Vector2Normalize(r), accel_mag);

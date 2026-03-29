@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 #find raylib
-find_package(raylib REQUIRED)
+find_package(raylib QUIET)
+option(ENABLE_SIMULATION "Build simulation with raylib" ${raylib_FOUND})
 
 add_executable(white_dwarfs
     src/main.cpp
@@ -13,5 +14,9 @@ add_executable(white_dwarfs
     src/solver.cpp
 )
 
-target_link_libraries(white_dwarfs raylib)
-
+if(ENABLE_SIMULATION AND raylib_FOUND)
+    target_link_libraries(white_dwarfs raylib)
+    target_compile_definitions(white_dwarfs PRIVATE HAVE_RAYLIB) 
+else()
+    message(STATUS "Raylib not found. Building without simulation.")
+endif()

@@ -53,7 +53,7 @@ def main(generate_data: bool = False):
     # Add labels for each point
     for i, label in enumerate(literature_df['labels']):
         plt.annotate(label, (literature_df['masses'].iloc[i], literature_df['radii'].iloc[i]), 
-                    textcoords="offset points", xytext=(0,10), ha='center', fontsize=9)
+                    textcoords="offset points", xytext=(0,10), ha='center', fontsize=7)
     
     plt.title(f'Mass-Radius Relationship of White Dwarfs (Electron Fraction: {electron_fraction})', fontsize=12)
     plt.xlabel('Mass (Solar Masses)')
