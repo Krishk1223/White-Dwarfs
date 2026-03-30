@@ -28,6 +28,15 @@ def main(generate_data: bool = False):
     data = data.iloc[:-1] #remove last row
     mass = data['Mass_MSUN'].values
     radius = data['Radius_RSUN'].values
+    chandareskhar_limit = mass[-1] #last value is the approximation of the chandareskhar limit
+    
+
+    composition_list = {
+        0.5 : 'Carbon(C-12)',
+        0.464 : 'Iron (Fe-56)', #expandable dict for other compositions
+    }
+
+    composition = composition_list.get(float(electron_fraction), 'Unknown')
 
     # Example data from literature:
     literature_data = {
@@ -40,30 +49,37 @@ def main(generate_data: bool = False):
 
     literature_df = pd.DataFrame(literature_data)
 
-    # Plot Mass vs Radius:
+    # Plot Mass vs Radius of original data:
     plt.figure(figsize=(10, 6))
     plt.plot(mass, radius, color='blue', linewidth=2, label='Calculated M-R Curve', zorder=1)
-    
-    # Plot example data with error bars
+    plt.axvline(x=chandareskhar_limit, color='green', linestyle='--', label=f'Chandrasekhar Limit ({chandareskhar_limit:.3f} M☉)', zorder=0)
+
+    # Plot provied literature data with error bars
     plt.errorbar(literature_df['masses'], literature_df['radii'], 
                 xerr=literature_df['mass_errors'], yerr=literature_df['radius_errors'], 
                 fmt='o', markersize=8, color='red', ecolor='red', 
                 label='Literature Data', zorder=2)
+
+    label_offsets = [
+        (0, 10),  # Sirius B
+        (-20, 10), # 40 Eri B
+        (20, -20) # Stein 2051
+    ]
     
-    # Add labels for each point
+    # Add labels for each point of literature data with specified offsets to avoid overlap:
     for i, label in enumerate(literature_df['labels']):
         plt.annotate(label, (literature_df['masses'].iloc[i], literature_df['radii'].iloc[i]), 
-                    textcoords="offset points", xytext=(0,10), ha='center', fontsize=7)
+                    textcoords="offset points", xytext=label_offsets[i], ha='center', fontsize=7)
     
-    plt.title(f'Mass-Radius Relationship of White Dwarfs (Electron Fraction: {electron_fraction})', fontsize=12)
+    plt.title(f'Mass-Radius Relationship of White Dwarfs {composition} Structure (Electron Fraction: {electron_fraction})', fontsize=12)
     plt.xlabel('Mass (Solar Masses)')
     plt.ylabel('Radius (Solar Radii)')
     plt.grid(True, alpha=0.3)
     plt.legend(fontsize=10)
     plt.tight_layout()
 
-    plt.savefig(f'plots/mass_radius_relationship_{electron_fraction}.png')
-    print(f"Plot saved to plots/mass_radius_relationship_{electron_fraction}.png")
+    plt.savefig(f'plots/mass_radius_relationship_{composition}_structure.png')
+    print(f"Plot saved to plots/mass_radius_relationship_{composition}_structure.png")
 
 
 if __name__ == "__main__":

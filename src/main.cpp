@@ -51,11 +51,11 @@ int main(){
     std::cout << "Data written successfully in ./data/white_dwarfs.csv \n";
     
     // Testing raylib:
-    #ifdef HAVE_RAYLIB
-        simulation(MSUN, MEARTH);
-    #else
-        std::cout << "Simulation not built (raylib may be disabled)\n";
-    #endif
+    // #ifdef HAVE_RAYLIB
+    //     simulation(MSUN, MEARTH);
+    // #else
+    //     std::cout << "Simulation not built (raylib may be disabled)\n";
+    // #endif
 
     return 0;
 }
