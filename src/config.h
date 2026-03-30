@@ -5,4 +5,4 @@
 // Y_e = electron fraction for white dwarf.
 // 0.5 = Y_e for C and 13.0/28 = Ye for Fe (comment the)
 
-inline double Y_e = 0.464;
+inline double Y_e = 0.5;
